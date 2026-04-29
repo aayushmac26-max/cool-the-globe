@@ -1,7 +1,7 @@
 document.addEventListener('DOMContentLoaded', () => {
 
     // ── CONFIG ───────────────────────────────────────────────────────────────
-    const API = 'http://localhost:3000/api'; // Point explicitly to the local backend
+    const API = 'https://cool-the-globe-api.onrender.com/api'; // Point explicitly to the live backend
 
     // ── HELPERS ──────────────────────────────────────────────────────────────
     const getToken = () => localStorage.getItem('ctg_token');

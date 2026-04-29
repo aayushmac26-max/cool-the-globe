@@ -1,0 +1,40 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="250" height="250">
+  <defs>
+    <style>
+      @import url('https://fonts.googleapis.com/css2?family=Rubik+Dirt&amp;display=swap');
+      .text {
+        font-family: 'Inlander Rough', 'Rubik Dirt', cursive, sans-serif;
+        font-size: 70px;
+        fill: #ffffff;
+        text-anchor: middle;
+        dominant-baseline: central;
+        text-shadow: 2px 2px 8px rgba(0,0,0,0.4);
+      }
+      .globe {
+        fill: #1ab05a;
+        stroke: #ffffff;
+        stroke-width: 6;
+      }
+      .meridian {
+        fill: none;
+        stroke: #d8f3e2;
+        stroke-width: 4;
+        opacity: 0.8;
+      }
+    </style>
+  </defs>
+  <!-- Globe Base -->
+  <circle cx="100" cy="100" r="90" class="globe" />
+  
+  <!-- Meridians and Parallels -->
+  <ellipse cx="100" cy="100" rx="45" ry="90" class="meridian" />
+  <line x1="10" y1="100" x2="190" y2="100" class="meridian" />
+  <ellipse cx="100" cy="100" rx="90" ry="45" class="meridian" />
+  <path d="M 28 45 Q 100 80 172 45" class="meridian" />
+  <path d="M 28 155 Q 100 120 172 155" class="meridian" />
+
+  <!-- Background for Text slightly -->
+  <!-- <circle cx="100" cy="100" r="50" fill="rgba(26, 176, 90, 0.7)" /> -->
+  <!-- CTG Text in middle -->
+  <text x="100" y="100" class="text">CTG</text>
+</svg>

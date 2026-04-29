@@ -1,0 +1,633 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cool The Globe - Carbon Footprint</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Rubik+Dirt&family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400;1,600;1,700&family=Outfit:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    <link rel="stylesheet" href="./index.css">
+</head>
+
+<body>
+    <!-- Advanced Animated Background -->
+    <div class="animated-bg"></div>
+
+    <!-- Navigation (Hidden until login) -->
+    <nav class="navbar gaming-nav hidden" id="main-nav">
+        <div class="logo neon-logo">
+            COOL THE GLOBE
+        </div>
+        <div class="nav-links">
+            <button id="nav-calculator" class="nav-btn active">MISSIONS</button>
+            <button id="nav-leaderboard" class="nav-btn">LEADERBOARD</button>
+            <button id="nav-dashboard" class="nav-btn">IMPACT</button>
+            <button id="nav-rewards" class="nav-btn">REWARDS</button>
+        </div>
+        <div class="nav-actions">
+            <div class="score-pill"><i class="fa-solid fa-bolt"></i> Score: <span id="nav-score">2,450 CO2</span></div>
+            <button id="nav-settings" class="nav-btn icon-btn"><i class="fa-solid fa-bell"></i></button>
+            <button id="nav-logout" class="nav-btn icon-btn"><i class="fa-solid fa-user"></i></button>
+        </div>
+    </nav>
+
+    <!-- Landing Section -->
+    <section id="landing-section" class="landing-page dark-gaming-theme fade-in">
+        
+        <!-- Hero Section -->
+        <div class="hero-earth-bg">
+            <div class="hero-content">
+                <h1 class="hero-title">OPERATION: <span class="neon-highlight">COOL THE GLOBE</span></h1>
+                <p class="hero-subtitle">The world needs a hero. Start your mission to reduce carbon today. Quantify your impact and join the global resistance against climate change.</p>
+                <div class="hero-actions">
+                    <button class="btn-neon" id="view-briefing-btn"><i class="fa-solid fa-file-contract"></i> VIEW BRIEFING</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="landing-container">
+
+
+            <!-- Global Threat Levels -->
+            <div class="section-header flex-between">
+                <div>
+                    <h2 class="section-title">GLOBAL THREAT LEVELS</h2>
+                    <p class="section-subtitle">Real-time planetary data and impact projection.</p>
+                </div>
+                <a href="#" class="neon-link">FULL REPORT <i class="fa-solid fa-arrow-trend-up"></i></a>
+            </div>
+
+            <div class="threat-grid">
+                <!-- Card 1: Global Warming -->
+                <div class="threat-card threat-large bg-cracked">
+                    <div class="card-overlay"></div>
+                    <div class="card-content">
+                        <div class="card-top flex-between">
+                            <div class="icon-label"><i class="fa-solid fa-temperature-half"></i></div>
+                            <div class="urgency-label"><span class="small-text">URGENCY</span><br><span class="critical-text">CRITICAL</span></div>
+                        </div>
+                        <h3 class="card-title">GLOBAL WARMING</h3>
+                        <div class="progress-section">
+                            <div class="flex-between stats-labels">
+                                <span>Current Drift: +1.1°C</span>
+                                <span class="neon-text">Limit: +1.5°C</span>
+                            </div>
+                            <div class="progress-bar-bg"><div class="progress-bar-fill gradient-red" style="width: 73%;"></div></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Card 2: Sea Level -->
+                <div class="threat-card threat-small bg-dark border-card">
+                    <div class="card-content">
+                        <div class="card-top flex-between">
+                            <div class="icon-label neon-icon"><i class="fa-solid fa-water"></i></div>
+                            <div class="badge-red">RISING</div>
+                        </div>
+                        <h3 class="card-title">SEA LEVEL CHANGE</h3>
+                        <p class="card-desc">Coastal zones under high alert for flooding events.</p>
+                        <div class="stat-box">
+                            <span class="big-number">20cm</span>
+                            <span class="small-label">Avg. rise since 1880</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Card 3: Public Health -->
+                <div class="threat-card threat-small bg-dark border-card">
+                    <div class="card-content">
+                        <div class="icon-label neon-icon mb-1"><i class="fa-solid fa-briefcase-medical"></i></div>
+                        <h3 class="card-title">PUBLIC HEALTH</h3>
+                        <div class="flex-between mt-2">
+                            <span class="card-desc">Air Quality Index</span>
+                            <span class="neon-text font-bold">MODERATE</span>
+                        </div>
+                        <div class="progress-bar-bg mt-1 mb-1"><div class="progress-bar-fill neon-bg" style="width: 45%;"></div></div>
+                        <p class="card-desc small-desc">Mission goal: Improve urban air filtration metrics through local action.</p>
+                    </div>
+                </div>
+
+                <!-- Card 4: Deforestation -->
+                <div class="threat-card threat-large bg-forest">
+                    <div class="card-overlay dark-overlay"></div>
+                    <div class="card-content">
+                        <div class="icon-label neon-icon mb-1"><i class="fa-solid fa-tree"></i></div>
+                        <h3 class="card-title">DEFORESTATION</h3>
+                        <p class="card-desc">Losing 10M hectares per year. Our missions target reforestation hubs.</p>
+                        <button class="btn-outline small-btn mt-2" onclick="alert('Reforestation Grid coming soon!')">VIEW REFORESTATION GRID</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Eco-Warrior Ranks Section -->
+            <div class="ranks-section">
+                <div class="ranks-left">
+                    <h2 class="section-title">THE <span class="neon-highlight">ECO-WARRIOR</span> RANKS</h2>
+                    <p class="section-subtitle mb-2">Join thousands of heroes globally who are completing missions and climbing the ranks. Every kg of CO2 saved brings you closer to legendary status.</p>
+                    
+                    <div class="rank-list">
+                        <div class="rank-item">
+                            <div class="rank-num neon-text">01</div>
+                            <div class="rank-avatar"><i class="fa-solid fa-user-ninja"></i></div>
+                            <div class="rank-info">
+                                <h4>ALEX "CARBON-KILLER" REED</h4>
+                                <span>TIER: EARTH GUARDIAN</span>
+                            </div>
+                            <div class="rank-score">
+                                <div class="neon-text font-bold">12.4k kg</div>
+                                <div class="small-label">SAVED</div>
+                            </div>
+                        </div>
+                        <div class="rank-item">
+                            <div class="rank-num">02</div>
+                            <div class="rank-avatar bg-gray"><i class="fa-solid fa-user-astronaut"></i></div>
+                            <div class="rank-info">
+                                <h4>S. CHEN</h4>
+                                <span>TIER: ECO-ELITE</span>
+                            </div>
+                            <div class="rank-score">
+                                <div class="font-bold">10.1k kg</div>
+                                <div class="small-label">SAVED</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- How To Calculate Carbon Footprint Section -->
+            <div id="how-to-calculate" style="margin-bottom: 4rem; width: 100%; padding-top: 2rem;">
+                <div class="section-header flex-between">
+                    <div>
+                        <h2 class="section-title">HOW TO CALCULATE CARBON FOOTPRINT</h2>
+                        <p class="section-subtitle">Your operational guide to using Cool The Globe.</p>
+                    </div>
+                </div>
+                <div class="threat-grid">
+                    <div class="threat-card threat-small bg-dark border-card">
+                        <div class="card-content">
+                            <div class="icon-label neon-icon mb-1"><i class="fa-solid fa-calculator"></i></div>
+                            <h3 class="card-title">01. ANALYZE</h3>
+                            <p class="card-desc">Input your daily habits across Transport, Energy, Food, Waste, and Water to calculate your CO2 impact.</p>
+                        </div>
+                    </div>
+                    <div class="threat-card threat-small bg-dark border-card">
+                        <div class="card-content">
+                            <div class="icon-label neon-icon mb-1"><i class="fa-solid fa-chart-pie"></i></div>
+                            <h3 class="card-title">02. REVIEW</h3>
+                            <p class="card-desc">Access your real-time dashboard to see CO2 projections and how you compare to global averages.</p>
+                        </div>
+                    </div>
+                    <div class="threat-card threat-small bg-dark border-card">
+                        <div class="card-content">
+                            <div class="icon-label neon-icon mb-1"><i class="fa-solid fa-wand-magic-sparkles"></i></div>
+                            <h3 class="card-title">03. IMPROVE & COMPETE</h3>
+                            <p class="card-desc">Get AI guidance, add friends to your network, and climb the Eco-Warrior leaderboard.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- CTA Section -->
+            <div class="cta-section">
+                <div class="cta-content">
+                    <h2 class="cta-title">READY TO <span class="neon-highlight">LEVEL UP?</span></h2>
+                    <p class="cta-subtitle">Calculate your footprint and unlock your personalized mission dashboard. The planet doesn't need another bystander. It needs a hero.</p>
+                    <button class="btn-neon large-btn" id="get-started-btn">START CALCULATOR</button>
+                    <p class="small-label mt-1">JOIN 1,240,892 WARRIORS ALREADY ACTIVE</p>
+                </div>
+                <i class="fa-solid fa-rocket cta-bg-icon"></i>
+            </div>
+            
+            <footer class="gaming-footer flex-between">
+                <div class="footer-brand">
+                    <h3>COOL THE GLOBE</h3>
+                    <p>&copy; 2026 COOL THE GLOBE. MISSION CONTROL BY ECO-WARRIORS.</p>
+                </div>
+                <div class="footer-links">
+                    <a href="#">Privacy</a>
+                    <a href="#">Terms</a>
+                    <a href="#">Data Sources</a>
+                    <a href="#" class="neon-link">Impact Share</a>
+                </div>
+                <div class="footer-socials">
+                    <i class="fa-solid fa-earth-americas"></i>
+                    <i class="fa-solid fa-share-nodes"></i>
+                    <i class="fa-brands fa-discord"></i>
+                </div>
+            </footer>
+        </div>
+    </section>
+
+    <main class="container">
+        <!-- Auth Section -->
+        <section id="auth-section" class="glass-card auth-card hidden">
+            <div class="auth-header">
+                <i class="fa-solid fa-earth-americas auth-icon"></i>
+                <h2>Welcome to Cool The Globe</h2>
+                <p>Track and compare your sustainable journey.</p>
+            </div>
+
+            <!-- Auth Tabs -->
+            <div class="auth-tabs">
+                <button class="auth-tab-btn active" data-tab="register" id="tab-register-btn">Create Account</button>
+                <button class="auth-tab-btn" data-tab="login" id="tab-login-btn">Sign In</button>
+            </div>
+
+            <!-- Register Form -->
+            <form id="auth-form" class="auth-form" data-mode="register">
+                <div class="input-group" id="name-field">
+                    <label for="auth-name">Full Name</label>
+                    <div class="input-with-unit">
+                        <i class="fa-regular fa-user"></i>
+                        <input type="text" id="auth-name" placeholder="John Doe">
+                    </div>
+                </div>
+                <div class="input-group">
+                    <label for="auth-email">Email Address</label>
+                    <div class="input-with-unit">
+                        <i class="fa-regular fa-envelope"></i>
+                        <input type="email" id="auth-email" placeholder="john@example.com" required>
+                    </div>
+                </div>
+                <div class="input-group">
+                    <label for="auth-password">Password</label>
+                    <div class="input-with-unit">
+                        <i class="fa-solid fa-lock"></i>
+                        <input type="password" id="auth-password" placeholder="••••••••" required minlength="6">
+                    </div>
+                </div>
+                <div id="auth-error" class="auth-error hidden"></div>
+                <div class="action-bar centered">
+                    <button type="submit" class="primary-btn" id="auth-submit-btn">
+                        <span id="auth-btn-text">Create Account &amp; Continue</span>
+                        <i class="fa-solid fa-spinner fa-spin hidden" id="auth-spinner"></i>
+                    </button>
+                </div>
+            </form>
+        </section>
+
+        <!-- Main Header -->
+        <header class="header hidden" id="main-header">
+            <h1 class="main-title">Understand Your Impact</h1>
+            <p class="subtitle">Calculate your daily carbon footprint and compete with your network.</p>
+        </header>
+
+        <!-- Calculator Section -->
+        <section id="calculator-section" class="glass-card hidden">
+            <div class="tabs">
+                <button class="tab-btn active" data-tab="transport"><i class="fa-solid fa-car"></i> Transport</button>
+                <button class="tab-btn" data-tab="energy"><i class="fa-solid fa-bolt"></i> Energy</button>
+                <button class="tab-btn" data-tab="food"><i class="fa-solid fa-utensils"></i> Food</button>
+                <button class="tab-btn" data-tab="waste"><i class="fa-solid fa-trash"></i> Waste</button>
+                <button class="tab-btn" data-tab="water"><i class="fa-solid fa-faucet-drip"></i> Water</button>
+            </div>
+
+            <div class="tab-content active" id="tab-transport">
+                <div class="input-group">
+                    <label for="car-usage">Personal Car</label>
+                    <div class="input-with-unit">
+                        <input type="number" id="car-usage" min="0" value="10">
+                        <span class="unit-label">km / day</span>
+                    </div>
+                </div>
+                <div class="input-group">
+                    <label for="public-usage">Public Transport</label>
+                    <div class="input-with-unit">
+                        <input type="number" id="public-usage" min="0" value="5">
+                        <span class="unit-label">km / day</span>
+                    </div>
+                </div>
+                <div class="input-group">
+                    <label for="flights-usage">Flights</label>
+                    <div class="input-with-unit">
+                        <input type="number" id="flights-usage" min="0" value="0">
+                        <span class="unit-label">hours / year</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="tab-content" id="tab-energy">
+                <div class="input-group">
+                    <label for="ac-usage">AC Usage</label>
+                    <div class="input-with-unit">
+                        <input type="number" id="ac-usage" min="0" value="4">
+                        <span class="unit-label">hours / day</span>
+                    </div>
+                </div>
+                <div class="input-group">
+                    <label for="electricity-bill">Monthly Electricity Bill</label>
+                    <div class="input-with-unit">
+                        <span class="unit-label" style="margin-right: 0.5rem; margin-left: 0;">$</span>
+                        <input type="number" id="electricity-bill" min="0" value="50">
+                        <span class="unit-label">estimate</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="tab-content" id="tab-food">
+                <div class="input-group">
+                    <label>Diet Type</label>
+                    <div class="radio-group">
+                        <label class="radio-label">
+                            <input type="radio" name="diet" value="vegan">
+                            <div class="radio-card"><i class="fa-solid fa-seedling"></i> Vegan</div>
+                        </label>
+                        <label class="radio-label">
+                            <input type="radio" name="diet" value="vegetarian">
+                            <div class="radio-card"><i class="fa-solid fa-carrot"></i> Vegetarian</div>
+                        </label>
+                        <label class="radio-label">
+                            <input type="radio" name="diet" value="omnivore" checked>
+                            <div class="radio-card"><i class="fa-solid fa-bowl-food"></i> Average</div>
+                        </label>
+                        <label class="radio-label">
+                            <input type="radio" name="diet" value="meat-heavy">
+                            <div class="radio-card"><i class="fa-solid fa-drumstick-bite"></i> Meat-heavy</div>
+                        </label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="tab-content" id="tab-waste">
+                <div class="input-group">
+                    <label>Do you actively recycle?</label>
+                    <label class="switch">
+                        <input type="checkbox" id="recycle-toggle">
+                        <span class="slider round"></span>
+                    </label>
+                </div>
+                <div class="input-group">
+                    <label>Do you compost food waste?</label>
+                    <label class="switch">
+                        <input type="checkbox" id="compost-toggle">
+                        <span class="slider round"></span>
+                    </label>
+                </div>
+            </div>
+
+            <div class="tab-content" id="tab-water">
+                <div class="input-group">
+                    <label for="showers-usage">Daily Shower</label>
+                    <div class="input-with-unit">
+                        <input type="number" id="showers-usage" min="0" value="10">
+                        <span class="unit-label">minutes</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="action-bar">
+                <button id="calculate-btn" class="primary-btn">Calculate Footprint <i
+                        class="fa-solid fa-arrow-right"></i></button>
+            </div>
+        </section>
+
+        <!-- Dashboard Section -->
+        <section id="dashboard-section" class="hidden">
+            <div class="dashboard-grid">
+                <!-- Total Display -->
+                <div class="glass-card stat-card main-stat">
+                    <h3>Your Daily Footprint</h3>
+                    <div class="stat-value"><span id="total-co2" class="count-up">0.0</span> <span class="unit">kg
+                            CO₂</span></div>
+                    <p class="stat-comparison" id="user-comparison">Calculating...</p>
+                </div>
+
+                <div class="glass-card stat-card info-stat">
+                    <h3>Annual Estimate</h3>
+                    <div class="stat-value"><span id="annual-co2">0.0</span> <span class="unit-small">tons CO₂ /
+                            year</span></div>
+                    <p id="annual-msg">Global average is ~4.7 tons.</p>
+                </div>
+
+                <!-- Chart -->
+                <div class="glass-card chart-card">
+                    <h3>Emissions Breakdown</h3>
+                    <div class="chart-container">
+                        <canvas id="emissionsChart"></canvas>
+                    </div>
+                </div>
+
+                <!-- Suggestions -->
+                <div class="glass-card suggestions-card" id="ai-suggestions-card">
+                    <h3><i class="fa-solid fa-wand-magic-sparkles" style="color: #f1c40f;"></i> AI Personalized Tips</h3>
+                    <div id="ai-loading" class="hidden">
+                        <i class="fa-solid fa-spinner fa-spin"></i> Analyzing your data...
+                    </div>
+                    <ul id="suggestions-list" class="suggestion-list"></ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- Leaderboard Section -->
+        <section id="leaderboard-section" class="glass-card hidden">
+            <div class="section-header">
+                <h2><i class="fa-solid fa-trophy" style="color: gold;"></i> Network Leaderboard</h2>
+                <p>See how your footprint compares to your friends.</p>
+            </div>
+            <!-- Leaderboard Type Tabs -->
+            <div class="lb-tabs">
+                <button class="lb-tab-btn active" data-lb="friends" id="lb-friends-btn">
+                    <i class="fa-solid fa-user-group"></i> Friends
+                </button>
+                <button class="lb-tab-btn" data-lb="global" id="lb-global-btn">
+                    <i class="fa-solid fa-earth-americas"></i> Global
+                </button>
+            </div>
+            <div class="leaderboard-list" id="leaderboard-list">
+                <!-- Populated dynamically -->
+            </div>
+        </section>
+
+        <!-- Settings Section -->
+        <section id="settings-section" class="glass-card hidden">
+            <div class="section-header">
+                <h2><i class="fa-solid fa-users"></i> Friends &amp; Network</h2>
+                <p>Connect with friends to compare on the leaderboard.</p>
+            </div>
+
+            <div class="settings-grid">
+                <!-- Search & Add Friends -->
+                <div class="add-contact-form">
+                    <h3><i class="fa-solid fa-user-plus"></i> Find Friends</h3>
+                    <div class="input-group">
+                        <label for="user-search-input">Search by name or email</label>
+                        <div class="input-with-unit">
+                            <i class="fa-solid fa-magnifying-glass"></i>
+                            <input type="text" id="user-search-input" placeholder="Search users...">
+                        </div>
+                    </div>
+                    <button id="user-search-btn" class="primary-btn" style="width:100%; justify-content:center; margin-bottom:1rem;">Search</button>
+                    <div id="user-search-results"></div>
+
+                    <!-- Incoming Friend Requests -->
+                    <h3 style="margin-top:1.5rem;"><i class="fa-solid fa-bell"></i> Incoming Requests</h3>
+                    <div id="incoming-requests-list">
+                        <p style="color:var(--color-text-muted); font-size:0.9rem;">No pending requests.</p>
+                    </div>
+                </div>
+
+                <!-- Friend List -->
+                <div class="contact-list-container">
+                    <h3>Your Friends</h3>
+                    <ul id="contacts-list" class="contacts-list-ul">
+                        <!-- Populated dynamically -->
+                    </ul>
+                    <!-- Profile Settings -->
+                    <h3 style="margin-top:1.5rem;"><i class="fa-solid fa-sliders"></i> Profile</h3>
+                    <div class="input-group" style="margin-top:0.75rem;">
+                        <label for="profile-name-input">Display Name</label>
+                        <div class="input-with-unit">
+                            <i class="fa-regular fa-user"></i>
+                            <input type="text" id="profile-name-input" placeholder="Your name">
+                        </div>
+                    </div>
+                    <label style="display:flex;align-items:center;gap:0.75rem;color:var(--color-text-muted);font-size:0.9rem;margin-top:0.5rem;">
+                        <label class="switch" style="margin:0;">
+                            <input type="checkbox" id="profile-public-toggle" checked>
+                            <span class="slider round"></span>
+                        </label>
+                        Show on global leaderboard
+                    </label>
+                    <button id="save-profile-btn" class="primary-btn" style="margin-top:1rem;">Save Profile</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Rewards Section -->
+        <section id="rewards-section" class="hidden">
+            <div class="rewards-page">
+                <div class="rewards-page-header">
+                    <h2 class="rewards-main-title">LOOK WHAT YOU <span class="neon-highlight">EARNED</span></h2>
+                    <p class="section-subtitle">Your eco-warrior progress at a glance</p>
+                </div>
+                <!-- Hero Row: Coin Balance + Streak -->
+                <div class="rewards-hero-row">
+                    <div class="glass-card rewards-balance-card">
+                        <div class="coin-display">
+                            <div class="coin-icon-wrapper">
+                                <div class="coin-3d"><i class="fa-solid fa-leaf"></i></div>
+                            </div>
+                            <div class="coin-info">
+                                <span class="coin-count" id="rewards-coin-count">0</span>
+                                <span class="coin-label">ECO COINS</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="glass-card rewards-streak-card">
+                        <div class="streak-display">
+                            <div class="streak-flame"><i class="fa-solid fa-fire"></i></div>
+                            <div class="streak-info">
+                                <span class="streak-count" id="rewards-streak-count">0</span>
+                                <span class="streak-label">DAY STREAK</span>
+                            </div>
+                        </div>
+                        <div class="streak-dots" id="streak-dots"></div>
+                    </div>
+                </div>
+
+                <!-- Earning Breakdown -->
+                <div class="section-header">
+                    <h2 class="section-title">HOW YOU <span class="neon-highlight">EARNED</span></h2>
+                    <p class="section-subtitle">Your eco-coin earning breakdown</p>
+                </div>
+                <div class="earning-grid">
+                    <div class="glass-card earning-card earning-streak">
+                        <div class="earning-card-icon"><i class="fa-solid fa-fire-flame-curved"></i></div>
+                        <h4>Daily Streak</h4>
+                        <p class="earning-desc">+2 coins per consecutive day</p>
+                        <div class="earning-stat"><span class="earning-coins" id="streak-coins">0</span> <span class="earning-unit">coins earned</span></div>
+                    </div>
+                    <div class="glass-card earning-card earning-reduction">
+                        <div class="earning-card-icon"><i class="fa-solid fa-arrow-trend-down"></i></div>
+                        <h4>Below Average</h4>
+                        <p class="earning-desc">+5 coins when under your daily avg</p>
+                        <div class="earning-stat"><span class="earning-coins" id="reduction-coins">0</span> <span class="earning-unit">coins earned</span></div>
+                    </div>
+                    <div class="glass-card earning-card earning-leaderboard">
+                        <div class="earning-card-icon"><i class="fa-solid fa-trophy"></i></div>
+                        <h4>Top 3 Rank</h4>
+                        <p class="earning-desc">+7 coins for Top 3 on leaderboard</p>
+                        <div class="earning-stat"><span class="earning-coins" id="leaderboard-coins">0</span> <span class="earning-unit">coins earned</span></div>
+                    </div>
+                </div>
+
+                <!-- Milestone Progress -->
+                <div class="section-header">
+                    <h2 class="section-title">COUPON <span class="neon-highlight">MILESTONES</span></h2>
+                    <p class="section-subtitle">Collect coins to unlock exclusive eco-rewards</p>
+                </div>
+                <div class="glass-card milestone-card">
+                    <div class="milestone-track">
+                        <div class="milestone-progress-bar"><div class="milestone-fill" id="milestone-fill"></div></div>
+                        <div class="milestone-markers">
+                            <div class="milestone-marker" data-coins="20"><div class="marker-icon" id="marker-20">🥉</div><span>20 coins</span></div>
+                            <div class="milestone-marker" data-coins="50"><div class="marker-icon" id="marker-50">🥈</div><span>50 coins</span></div>
+                            <div class="milestone-marker" data-coins="100"><div class="marker-icon" id="marker-100">🥇</div><span>100 coins</span></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Coupons + Leaderboard Row -->
+                <div class="rewards-bottom-row">
+                    <div class="glass-card coupons-card">
+                        <h3><i class="fa-solid fa-ticket" style="color:#39ff14;"></i> Unlocked Coupons</h3>
+                        <div class="coupons-list" id="coupons-list"></div>
+                    </div>
+                    <div class="glass-card rewards-lb-card">
+                        <h3><i class="fa-solid fa-ranking-star" style="color:#ffd700;"></i> Friends Leaderboard</h3>
+                        <p class="section-subtitle" style="margin-bottom:1rem;">Top 3 earn +7 coins weekly</p>
+                        <div class="rewards-lb-list" id="rewards-lb-list"></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Floating Chatbot Widget -->
+    <div id="chatbot-widget" class="chatbot-widget hidden">
+        <button id="chatbot-toggle" class="chatbot-toggle">
+            <svg width="40" height="40" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                <!-- Leafy branch reminiscent of the icon provided -->
+                <path d="M30 80 Q 45 60 55 30" fill="none" stroke="#6bbe54" stroke-width="4" stroke-linecap="round"/>
+                <path d="M45 65 Q 60 55 65 65 Q 55 75 45 65" fill="#5cb343"/>
+                <path d="M50 50 Q 65 40 70 50 Q 60 60 50 50" fill="#75d65a"/>
+                <path d="M53 35 Q 68 25 73 35 Q 63 45 53 35" fill="#5cb343"/>
+                <path d="M55 30 Q 65 15 55 10 Q 45 20 55 30" fill="#75d65a"/>
+                <path d="M39 70 Q 25 65 25 55 Q 35 60 39 70" fill="#75d65a"/>
+                <path d="M44 55 Q 30 50 30 40 Q 40 45 44 55" fill="#5cb343"/>
+                <path d="M49 40 Q 35 35 35 25 Q 45 30 49 40" fill="#75d65a"/>
+            </svg>
+        </button>
+        <div id="chatbot-container" class="chatbot-container hidden">
+            <div class="chatbot-header">
+                <h3><i class="fa-solid fa-leaf"></i> EcoMind</h3>
+                <button id="chatbot-close"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <div id="chatbot-messages" class="chatbot-messages">
+                <div class="message-wrapper ai-wrapper">
+                    <div class="ai-avatar"><i class="fa-solid fa-leaf"></i></div>
+                    <div class="message ai-message">
+                        Hello, how can I help you?
+                    </div>
+                </div>
+            </div>
+            <div class="chatbot-input">
+                <input type="text" id="chatbot-input-field" placeholder="Ask a question...">
+                <button id="chatbot-send-btn"><i class="fa-solid fa-paper-plane"></i></button>
+            </div>
+        </div>
+    </div>
+
+
+
+    <!-- ChartJS -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="./app.js"></script>
+    
+</body>
+
+</html>

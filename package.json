@@ -1,0 +1,11 @@
+{
+  "name": "cool-the-globe",
+  "version": "1.0.0",
+  "description": "Cool The Globe - Carbon Footprint Tracker",
+  "scripts": {
+    "start": "node cooltheglobe-backend/server.js"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}

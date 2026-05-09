@@ -1,7 +1,7 @@
 document.addEventListener('DOMContentLoaded', () => {
 
     // ── CONFIG ───────────────────────────────────────────────────────────────
-    const API = 'http://localhost:3000/api'; // Point to the local backend
+    const API = '/api'; // Relative path — works on localhost AND on Render
 
     // ── HELPERS ──────────────────────────────────────────────────────────────
     const getToken = () => localStorage.getItem('ctg_token');

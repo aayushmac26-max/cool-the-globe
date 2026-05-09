@@ -26,6 +26,7 @@
             <button id="nav-leaderboard" class="nav-btn">LEADERBOARD</button>
             <button id="nav-dashboard" class="nav-btn">IMPACT</button>
             <button id="nav-rewards" class="nav-btn">REWARDS</button>
+            <button id="nav-admin" class="nav-btn hidden">ADMIN</button>
         </div>
         <div class="nav-actions">
             <div class="score-pill"><i class="fa-solid fa-bolt"></i> Score: <span id="nav-score">2,450 CO2</span></div>
@@ -122,41 +123,7 @@
                 </div>
             </div>
 
-            <!-- Eco-Warrior Ranks Section -->
-            <div class="ranks-section">
-                <div class="ranks-left">
-                    <h2 class="section-title">THE <span class="neon-highlight">ECO-WARRIOR</span> RANKS</h2>
-                    <p class="section-subtitle mb-2">Join thousands of heroes globally who are completing missions and climbing the ranks. Every kg of CO2 saved brings you closer to legendary status.</p>
-                    
-                    <div class="rank-list">
-                        <div class="rank-item">
-                            <div class="rank-num neon-text">01</div>
-                            <div class="rank-avatar"><i class="fa-solid fa-user-ninja"></i></div>
-                            <div class="rank-info">
-                                <h4>ALEX "CARBON-KILLER" REED</h4>
-                                <span>TIER: EARTH GUARDIAN</span>
-                            </div>
-                            <div class="rank-score">
-                                <div class="neon-text font-bold">12.4k kg</div>
-                                <div class="small-label">SAVED</div>
-                            </div>
-                        </div>
-                        <div class="rank-item">
-                            <div class="rank-num">02</div>
-                            <div class="rank-avatar bg-gray"><i class="fa-solid fa-user-astronaut"></i></div>
-                            <div class="rank-info">
-                                <h4>S. CHEN</h4>
-                                <span>TIER: ECO-ELITE</span>
-                            </div>
-                            <div class="rank-score">
-                                <div class="font-bold">10.1k kg</div>
-                                <div class="small-label">SAVED</div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
 
-            </div>
 
             <!-- How To Calculate Carbon Footprint Section -->
             <div id="how-to-calculate" style="margin-bottom: 4rem; width: 100%; padding-top: 2rem;">
@@ -290,21 +257,21 @@
                 <div class="input-group">
                     <label for="car-usage">Personal Car</label>
                     <div class="input-with-unit">
-                        <input type="number" id="car-usage" min="0" value="10">
+                        <input type="number" id="car-usage" min="0" placeholder="0" value="">
                         <span class="unit-label">km / day</span>
                     </div>
                 </div>
                 <div class="input-group">
                     <label for="public-usage">Public Transport</label>
                     <div class="input-with-unit">
-                        <input type="number" id="public-usage" min="0" value="5">
+                        <input type="number" id="public-usage" min="0" placeholder="0" value="">
                         <span class="unit-label">km / day</span>
                     </div>
                 </div>
                 <div class="input-group">
                     <label for="flights-usage">Flights</label>
                     <div class="input-with-unit">
-                        <input type="number" id="flights-usage" min="0" value="0">
+                        <input type="number" id="flights-usage" min="0" placeholder="0" value="">
                         <span class="unit-label">hours / year</span>
                     </div>
                 </div>
@@ -314,7 +281,7 @@
                 <div class="input-group">
                     <label for="ac-usage">AC Usage</label>
                     <div class="input-with-unit">
-                        <input type="number" id="ac-usage" min="0" value="4">
+                        <input type="number" id="ac-usage" min="0" placeholder="0" value="">
                         <span class="unit-label">hours / day</span>
                     </div>
                 </div>
@@ -322,7 +289,7 @@
                     <label for="electricity-bill">Monthly Electricity Bill</label>
                     <div class="input-with-unit">
                         <span class="unit-label" style="margin-right: 0.5rem; margin-left: 0;">$</span>
-                        <input type="number" id="electricity-bill" min="0" value="50">
+                        <input type="number" id="electricity-bill" min="0" placeholder="0" value="">
                         <span class="unit-label">estimate</span>
                     </div>
                 </div>
@@ -373,7 +340,7 @@
                 <div class="input-group">
                     <label for="showers-usage">Daily Shower</label>
                     <div class="input-with-unit">
-                        <input type="number" id="showers-usage" min="0" value="10">
+                        <input type="number" id="showers-usage" min="0" placeholder="0" value="">
                         <span class="unit-label">minutes</span>
                     </div>
                 </div>
@@ -495,7 +462,49 @@
                     <button id="save-profile-btn" class="primary-btn" style="margin-top:1rem;">Save Profile</button>
                 </div>
             </div>
+
+            <!-- Password Change Card -->
+            <div class="glass-card" style="margin-top: 2rem;">
+                <h3 style="margin-bottom: 1rem;"><i class="fa-solid fa-key"></i> Change Password</h3>
+                <div class="input-group" style="max-width: 400px;">
+                    <label for="profile-current-password">Current Password</label>
+                    <div class="input-with-unit">
+                        <i class="fa-solid fa-lock"></i>
+                        <input type="password" id="profile-current-password" placeholder="••••••••">
+                    </div>
+                </div>
+                <div class="input-group" style="max-width: 400px;">
+                    <label for="profile-new-password">New Password</label>
+                    <div class="input-with-unit">
+                        <i class="fa-solid fa-lock"></i>
+                        <input type="password" id="profile-new-password" placeholder="••••••••">
+                    </div>
+                </div>
+                <button id="change-password-btn" class="primary-btn" style="margin-top:1rem;">Update Password</button>
+            </div>
+
+            <!-- Feedback Form Card -->
+            <div class="glass-card" style="margin-top: 2rem;">
+                <h3 style="margin-bottom: 1rem;"><i class="fa-solid fa-star"></i> App Feedback</h3>
+                <p style="color:var(--color-text-muted); font-size:0.9rem; margin-bottom: 1rem;">Rate your experience and let us know how we can improve.</p>
+                
+                <div class="rating-stars" id="feedback-stars" style="display:flex; gap:0.5rem; font-size: 1.5rem; color: #555; margin-bottom: 1rem; cursor: pointer;">
+                    <i class="fa-solid fa-star star-btn" data-value="1"></i>
+                    <i class="fa-solid fa-star star-btn" data-value="2"></i>
+                    <i class="fa-solid fa-star star-btn" data-value="3"></i>
+                    <i class="fa-solid fa-star star-btn" data-value="4"></i>
+                    <i class="fa-solid fa-star star-btn" data-value="5"></i>
+                </div>
+                
+                <div class="input-group">
+                    <label for="feedback-suggestion">Suggestions</label>
+                    <textarea id="feedback-suggestion" placeholder="Any thoughts on how we can improve?" rows="4" style="width: 100%; border: 1px solid rgba(255, 255, 255, 0.1); background: rgba(0, 0, 0, 0.2); color: var(--color-text); padding: 0.75rem; border-radius: 8px; resize: vertical; font-family: inherit; font-size: 1rem;"></textarea>
+                </div>
+                
+                <button id="submit-feedback-btn" class="primary-btn" style="margin-top:1rem;">Submit Feedback</button>
+            </div>
         </section>
+
 
         <!-- Rewards Section -->
         <section id="rewards-section" class="hidden">
@@ -578,13 +587,100 @@
                         <div class="coupons-list" id="coupons-list"></div>
                     </div>
                     <div class="glass-card rewards-lb-card">
-                        <h3><i class="fa-solid fa-ranking-star" style="color:#ffd700;"></i> Friends Leaderboard</h3>
-                        <p class="section-subtitle" style="margin-bottom:1rem;">Top 3 earn +7 coins weekly</p>
-                        <div class="rewards-lb-list" id="rewards-lb-list"></div>
+                        <h3><i class="fa-solid fa-chart-line" style="color:#39ff14;"></i> Your Progress</h3>
+                        <p class="section-subtitle" style="margin-bottom:1rem;">Your daily carbon footprint log</p>
+                        <div class="chart-container" style="height: 250px; position: relative;">
+                            <canvas id="userProgressChart"></canvas>
+                        </div>
                     </div>
                 </div>
             </div>
         </section>
+
+        <!-- Admin Section -->
+        <section id="admin-section" class="glass-card hidden">
+            <div class="section-header">
+                <h2><i class="fa-solid fa-shield-halved"></i> Admin Dashboard</h2>
+                <p>System overview and user data.</p>
+            </div>
+
+            <div class="dashboard-grid" style="margin-bottom: 2rem;">
+                <div class="glass-card stat-card main-stat">
+                    <h3>Total Users</h3>
+                    <div class="stat-value"><span id="admin-total-users">0</span> <span class="unit">users</span></div>
+                </div>
+                <div class="glass-card stat-card info-stat">
+                    <h3>Avg. Footprint</h3>
+                    <div class="stat-value"><span id="admin-avg-footprint">0.0</span> <span class="unit-small">kg CO₂</span></div>
+                </div>
+            </div>
+
+            <div class="admin-grid">
+                <!-- Stats Chart -->
+                <div class="glass-card chart-card">
+                    <h3>User Registration Growth</h3>
+                    <div class="chart-container">
+                        <canvas id="adminUsersChart"></canvas>
+                    </div>
+                </div>
+
+                <!-- All Users Table -->
+                <div class="glass-card">
+                    <h3>All Users Data</h3>
+                    <div style="overflow-x: auto;">
+                        <table class="admin-table">
+                            <thead>
+                                <tr>
+                                    <th>Name</th>
+                                    <th>Footprint (kg CO₂)</th>
+                                    <th>Joined Date</th>
+                                </tr>
+                            </thead>
+                            <tbody id="admin-users-tbody">
+                                <!-- Populated dynamically -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Global Leaderboard for Admin -->
+                <div class="glass-card">
+                    <h3>Global Leaderboard</h3>
+                    <div class="leaderboard-list" id="admin-leaderboard-list">
+                        <!-- Populated dynamically -->
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Admin User Details Modal -->
+        <div id="admin-user-modal" class="modal-overlay hidden">
+            <div class="glass-card modal-content" style="max-width: 600px; width: 90%; margin: 2rem auto; position: relative; max-height: 90vh; overflow-y: auto;">
+                <button id="admin-modal-close" class="rm-btn" style="position: absolute; top: 1.5rem; right: 1.5rem; font-size: 1.5rem;"><i class="fa-solid fa-xmark"></i></button>
+                <h2 id="admin-modal-title" style="margin-bottom: 1.5rem;"><i class="fa-solid fa-user"></i> User Details</h2>
+                
+                <div class="dashboard-grid" style="margin-bottom: 1.5rem; grid-template-columns: 1fr;">
+                    <div class="glass-card stat-card main-stat" style="padding: 1.5rem !important;">
+                        <h3>Latest Footprint</h3>
+                        <div class="stat-value"><span id="admin-modal-footprint">0.0</span> <span class="unit">kg CO₂</span></div>
+                    </div>
+                </div>
+
+                <div class="glass-card chart-card" style="margin-bottom: 1.5rem;">
+                    <h3>Daily Carbon Footprint</h3>
+                    <div class="chart-container" style="height: 250px;">
+                        <canvas id="adminUserGraph"></canvas>
+                    </div>
+                </div>
+
+                <div class="glass-card" style="margin-bottom: 1rem;">
+                    <h3><i class="fa-solid fa-comments"></i> User Feedback</h3>
+                    <div id="admin-modal-feedback-list" style="margin-top: 1rem;">
+                        <!-- Populated dynamically -->
+                    </div>
+                </div>
+            </div>
+        </div>
     </main>
 
     <!-- Floating Chatbot Widget -->

@@ -1,7 +1,7 @@
 document.addEventListener('DOMContentLoaded', () => {
 
     // ── CONFIG ───────────────────────────────────────────────────────────────
-    const API = 'https://cool-the-globe-api.onrender.com/api'; // Point explicitly to the live backend
+    const API = 'http://localhost:3000/api'; // Point to the local backend
 
     // ── HELPERS ──────────────────────────────────────────────────────────────
     const getToken = () => localStorage.getItem('ctg_token');
@@ -43,6 +43,7 @@ document.addEventListener('DOMContentLoaded', () => {
         leaderboard: document.getElementById('nav-leaderboard'),
         settings:    document.getElementById('nav-settings'),
         rewards:     document.getElementById('nav-rewards'),
+        admin:       document.getElementById('nav-admin'),
     };
     const sections = {
         calculator:  document.getElementById('calculator-section'),
@@ -50,6 +51,7 @@ document.addEventListener('DOMContentLoaded', () => {
         leaderboard: document.getElementById('leaderboard-section'),
         settings:    document.getElementById('settings-section'),
         rewards:     document.getElementById('rewards-section'),
+        admin:       document.getElementById('admin-section'),
     };
     const authForm      = document.getElementById('auth-form');
     const authError     = document.getElementById('auth-error');
@@ -69,8 +71,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
     document.getElementById('get-started-btn').addEventListener('click', () => {
         if (state.user) {
-            // Already logged in — go straight to calculator
-            switchView('calculator');
+            // Already logged in — go straight to app and evaluate roles
+            enterApp();
         } else {
             landingSection.classList.add('hidden');
             authSection.classList.remove('hidden');
@@ -145,13 +147,37 @@ document.addEventListener('DOMContentLoaded', () => {
         authError.classList.remove('hidden');
     }
 
-    function enterApp() {
+    async function enterApp() {
         authSection.classList.add('hidden');
         mainNav.classList.remove('hidden');
         mainHeader.classList.remove('hidden');
         document.getElementById('chatbot-widget').classList.remove('hidden');
         authForm.reset();
-        switchView('calculator');
+
+        if (state.user) {
+            try {
+                const logs = await apiFetch('/footprint/me');
+                const historyKey = `ctg_daily_footprint_v2_${state.user.id}`;
+                const history = {};
+                // logs are newest first. Reverse to process oldest to newest, so newest overwrites.
+                [...logs].reverse().forEach(log => {
+                    const dateKey = localDateKey(new Date(log.recordedAt));
+                    history[dateKey] = log.totalKg;
+                });
+                localStorage.setItem(historyKey, JSON.stringify(history));
+            } catch (err) {
+                console.warn('Could not sync history:', err);
+            }
+        }
+
+        const navAdminBtn = document.getElementById('nav-admin');
+        if (state.user && state.user.email === 'admin@gmail.com') {
+            if (navAdminBtn) navAdminBtn.classList.remove('hidden');
+            switchView('admin');
+        } else {
+            if (navAdminBtn) navAdminBtn.classList.add('hidden');
+            switchView('calculator');
+        }
     }
 
     // ── AUTO-LOGIN (persisted token) ──────────────────────────────────────────
@@ -174,8 +200,39 @@ document.addEventListener('DOMContentLoaded', () => {
             mainNav.classList.add('hidden');
             mainHeader.classList.add('hidden');
             document.getElementById('chatbot-widget').classList.add('hidden');
+            if (document.getElementById('nav-admin')) document.getElementById('nav-admin').classList.add('hidden');
             Object.values(sections).forEach(s => s.classList.add('hidden'));
             landingSection.classList.remove('hidden');
+
+            // Reset calculator inputs
+            ['car-usage', 'public-usage', 'flights-usage', 'ac-usage', 'electricity-bill', 'showers-usage'].forEach(id => {
+                const el = document.getElementById(id);
+                if (el) el.value = '';
+            });
+            const recycleToggle = document.getElementById('recycle-toggle');
+            if (recycleToggle) recycleToggle.checked = false;
+            const compostToggle = document.getElementById('compost-toggle');
+            if (compostToggle) compostToggle.checked = false;
+            const dietRadio = document.querySelector('input[name="diet"][value="omnivore"]');
+            if (dietRadio) dietRadio.checked = true;
+
+            // Reset dashboard elements
+            const totalCo2 = document.getElementById('total-co2');
+            if (totalCo2) totalCo2.textContent = '0.0';
+            const annualCo2 = document.getElementById('annual-co2');
+            if (annualCo2) annualCo2.textContent = '0.0';
+            const userComp = document.getElementById('user-comparison');
+            if (userComp) userComp.textContent = 'Calculating...';
+            const suggList = document.getElementById('suggestions-list');
+            if (suggList) suggList.innerHTML = '';
+            if (chartInstance) {
+                chartInstance.destroy();
+                chartInstance = null;
+            }
+            if (window.userProgressChartInstance) {
+                window.userProgressChartInstance.destroy();
+                window.userProgressChartInstance = null;
+            }
         });
     }
     // ── NAVIGATION ────────────────────────────────────────────────────────────
@@ -202,8 +259,203 @@ document.addEventListener('DOMContentLoaded', () => {
         if (viewName === 'leaderboard') renderLeaderboard();
         if (viewName === 'settings')    renderSettings();
         if (viewName === 'rewards')     renderRewards();
+        if (viewName === 'admin')       renderAdmin();
     }
     Object.keys(navBtns).forEach(key => navBtns[key].addEventListener('click', () => switchView(key)));
+
+    // ── ADMIN RENDER ──────────────────────────────────────────────────────────
+    let adminChartInstance = null;
+    async function renderAdmin() {
+        const tbody = document.getElementById('admin-users-tbody');
+        const lbList = document.getElementById('admin-leaderboard-list');
+        tbody.innerHTML = '<tr><td colspan="4" style="text-align:center;">Loading...</td></tr>';
+        
+        try {
+            const users = await apiFetch('/users/admin/all');
+            
+            window.adminUsersData = users; // Store for modal
+            
+            // Render Table
+            tbody.innerHTML = users.map(u => `
+                <tr style="cursor: pointer; transition: background 0.2s;" onmouseover="this.style.background='rgba(255,255,255,0.05)'" onmouseout="this.style.background='transparent'" onclick="window.showAdminUserModal('${u.id}')">
+                    <td><span style="color:var(--color-primary); font-weight:600;">${u.name}</span></td>
+                    <td>${u.latestFootprint !== null ? u.latestFootprint.toFixed(1) : 'No data'}</td>
+                    <td>${new Date(u.createdAt).toLocaleDateString()}</td>
+                </tr>
+            `).join('');
+            
+            // Render Chart (Cumulative Users over time) and Stats
+            const datesMap = {};
+            let totalFp = 0;
+            let fpCount = 0;
+            let dist = { 'Excellent (<10)': 0, 'Average (10-20)': 0, 'High (>20)': 0 };
+
+            users.forEach(u => {
+                const d = new Date(u.createdAt).toLocaleDateString();
+                datesMap[d] = (datesMap[d] || 0) + 1;
+
+                if (u.latestFootprint !== null) {
+                    totalFp += u.latestFootprint;
+                    fpCount++;
+                    if (u.latestFootprint < 10) dist['Excellent (<10)']++;
+                    else if (u.latestFootprint <= 20) dist['Average (10-20)']++;
+                    else dist['High (>20)']++;
+                }
+            });
+
+            document.getElementById('admin-total-users').textContent = users.length;
+            document.getElementById('admin-avg-footprint').textContent = fpCount > 0 ? (totalFp / fpCount).toFixed(1) : '0.0';
+
+
+
+            const sortedDates = Object.keys(datesMap).sort((a,b) => new Date(a) - new Date(b));
+            let cumulative = 0;
+            const growthData = sortedDates.map(d => {
+                cumulative += datesMap[d];
+                return cumulative;
+            });
+            
+            const ctx = document.getElementById('adminUsersChart').getContext('2d');
+            if (adminChartInstance) adminChartInstance.destroy();
+            adminChartInstance = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: sortedDates,
+                    datasets: [{
+                        label: 'Total Registered Users',
+                        data: growthData,
+                        borderColor: '#39ff14',
+                        backgroundColor: 'transparent',
+                        fill: false,
+                        tension: 0.4,
+                        borderWidth: 2,
+                        pointBackgroundColor: '#39ff14'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: { legend: { labels: { color: '#fff' } } },
+                    scales: {
+                        x: { ticks: { color: '#aaa' }, grid: { color: '#333' } },
+                        y: { ticks: { color: '#aaa', stepSize: 1 }, grid: { color: '#333' } }
+                    }
+                }
+            });
+
+            // Global Leaderboard for Admin
+            const ranked = await apiFetch('/leaderboard/global');
+            if (!ranked.length) {
+                lbList.innerHTML = '<p style="text-align:center;color:#777;padding:2rem;">No data yet.</p>';
+                return;
+            }
+            lbList.innerHTML = ranked.map((person, index) => {
+                let rankClass = '', iconClass = 'fa-medal';
+                if (index === 0)      { rankClass = 'gold';   iconClass = 'fa-trophy'; }
+                else if (index === 1) { rankClass = 'silver'; }
+                else if (index === 2) { rankClass = 'bronze'; }
+
+                const footprintDisplay = person.latestFootprint !== null
+                    ? `${person.latestFootprint.toFixed(1)} <span>kg CO₂</span>`
+                    : '<span style="color:#888">No data</span>';
+
+                return `
+                <div class="leaderboard-item">
+                    <div class="rank ${rankClass}"><i class="fa-solid ${iconClass}"></i> ${person.rank ?? '-'}</div>
+                    <div class="player-info">
+                        <div class="player-name">${person.name}</div>
+                    </div>
+                    <div class="player-score">${footprintDisplay}</div>
+                </div>`;
+            }).join('');
+            
+        } catch (err) {
+            tbody.innerHTML = `<tr><td colspan="4" style="color:#e74c3c; text-align:center;">Error: ${err.message}</td></tr>`;
+        }
+    }
+
+    // ── ADMIN USER MODAL LOGIC ────────────────────────────────────────────────
+    let adminUserChartInstance = null;
+    const adminUserModal = document.getElementById('admin-user-modal');
+    
+    if (adminUserModal) {
+        document.getElementById('admin-modal-close').addEventListener('click', () => {
+            adminUserModal.classList.remove('active');
+            setTimeout(() => adminUserModal.classList.add('hidden'), 300);
+        });
+
+        window.showAdminUserModal = (userId) => {
+            const user = window.adminUsersData.find(u => u.id === userId);
+            if (!user) return;
+
+            document.getElementById('admin-modal-title').innerHTML = `<i class="fa-solid fa-user"></i> ${user.name}`;
+            document.getElementById('admin-modal-footprint').textContent = user.latestFootprint !== null ? user.latestFootprint.toFixed(1) : '0.0';
+
+            // Render Feedback
+            const feedbackList = document.getElementById('admin-modal-feedback-list');
+            if (!user.feedbacks || user.feedbacks.length === 0) {
+                feedbackList.innerHTML = '<p style="color:var(--color-text-muted); font-size:0.9rem;">No feedback given.</p>';
+            } else {
+                feedbackList.innerHTML = user.feedbacks.map(f => `
+                    <div style="background: rgba(0,0,0,0.2); padding: 1rem; border-radius: 8px; margin-bottom: 0.8rem; border: 1px solid rgba(255,255,255,0.05);">
+                        <div style="color: #f1c40f; margin-bottom: 0.5rem; font-size: 1.2rem;">
+                            ${Array(f.rating).fill('<i class="fa-solid fa-star"></i>').join('')}
+                            ${Array(5 - f.rating).fill('<i class="fa-regular fa-star" style="color:#555;"></i>').join('')}
+                        </div>
+                        <p style="font-size: 0.95rem; line-height: 1.4; color: var(--color-text);">${f.suggestion || '<i>No text provided</i>'}</p>
+                        <p style="font-size: 0.75rem; color: var(--color-text-muted); margin-top: 0.5rem;">${new Date(f.submittedAt).toLocaleDateString()}</p>
+                    </div>
+                `).join('');
+            }
+
+            adminUserModal.classList.remove('hidden');
+            
+            // Render Graph AFTER modal is visible so Chart.js can calculate dimensions
+            setTimeout(() => {
+                adminUserModal.classList.add('active');
+                const ctx = document.getElementById('adminUserGraph').getContext('2d');
+                if (adminUserChartInstance) adminUserChartInstance.destroy();
+
+                const logs = user.logs || [];
+                if (logs.length === 0) {
+                    adminUserChartInstance = new Chart(ctx, {
+                        type: 'line', data: { labels: ['No data'], datasets: [] },
+                        options: { responsive: true, maintainAspectRatio: false }
+                    });
+                } else {
+                    // sort chronologically
+                    logs.sort((a, b) => new Date(a.recordedAt) - new Date(b.recordedAt));
+                    const labels = logs.map(l => new Date(l.recordedAt).toLocaleDateString('en', { month: 'short', day: 'numeric' }));
+                    const dataVals = logs.map(l => l.totalKg);
+
+                    adminUserChartInstance = new Chart(ctx, {
+                        type: 'line',
+                        data: {
+                            labels: labels,
+                            datasets: [{
+                                label: 'Daily Footprint (kg CO₂)',
+                                data: dataVals,
+                                borderColor: '#39ff14',
+                                backgroundColor: 'rgba(57, 255, 20, 0.2)',
+                                fill: true,
+                                tension: 0.4,
+                                borderWidth: 2,
+                                pointBackgroundColor: '#39ff14'
+                            }]
+                        },
+                        options: {
+                            responsive: true, maintainAspectRatio: false,
+                            plugins: { legend: { display: false } },
+                            scales: {
+                                x: { ticks: { color: '#aaa' }, grid: { color: '#333' } },
+                                y: { ticks: { color: '#aaa', stepSize: 5 }, grid: { color: '#333' } }
+                            }
+                        }
+                    });
+                }
+            }, 50);
+        };
+    }
 
     // ── CALCULATOR TABS ───────────────────────────────────────────────────────
     document.querySelectorAll('.tab-btn').forEach(btn => {
@@ -260,9 +512,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // Save today's footprint to localStorage for rewards streak view
         const todayKey = localDateKey(new Date());
-        const history = JSON.parse(localStorage.getItem('ctg_daily_footprint') || '{}');
+        const historyKey = `ctg_daily_footprint_v2_${state.user ? state.user.id : 'guest'}`;
+        const history = JSON.parse(localStorage.getItem(historyKey) || '{}');
         history[todayKey] = parseFloat(totalDaily.toFixed(2));
-        localStorage.setItem('ctg_daily_footprint', JSON.stringify(history));
+        localStorage.setItem(historyKey, JSON.stringify(history));
 
         // Save to backend (non-blocking)
         try {
@@ -480,6 +733,113 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
+    // Change Password
+    const changePwdBtn = document.getElementById('change-password-btn');
+    if (changePwdBtn) {
+        changePwdBtn.addEventListener('click', async () => {
+            const currentPassword = document.getElementById('profile-current-password').value;
+            const newPassword = document.getElementById('profile-new-password').value;
+            if (!currentPassword || !newPassword) return showToast('Please fill out both password fields.', true);
+            
+            const originalText = changePwdBtn.textContent;
+            changePwdBtn.textContent = 'Updating...';
+            try {
+                await apiFetch('/users/me/password', {
+                    method: 'PUT',
+                    body: JSON.stringify({ currentPassword, newPassword }),
+                });
+                showToast('Password updated successfully!');
+                document.getElementById('profile-current-password').value = '';
+                document.getElementById('profile-new-password').value = '';
+            } catch (err) {
+                showToast(err.message, true);
+            } finally {
+                changePwdBtn.textContent = originalText;
+            }
+        });
+    }
+
+    // Feedback Form Logic
+    const feedbackStars = document.querySelectorAll('#feedback-stars .star-btn');
+    let currentRating = 0;
+    
+    if (feedbackStars.length > 0) {
+        feedbackStars.forEach(star => {
+            star.addEventListener('click', () => {
+                currentRating = parseInt(star.getAttribute('data-value'));
+                feedbackStars.forEach(s => {
+                    if (parseInt(s.getAttribute('data-value')) <= currentRating) {
+                        s.style.color = '#f1c40f'; // Gold star
+                    } else {
+                        s.style.color = '#555'; // Grey star
+                    }
+                });
+            });
+            
+            // Hover effects
+            star.addEventListener('mouseenter', () => {
+                const hoverVal = parseInt(star.getAttribute('data-value'));
+                feedbackStars.forEach(s => {
+                    if (parseInt(s.getAttribute('data-value')) <= hoverVal) {
+                        s.style.color = '#f1c40f';
+                    } else {
+                        s.style.color = parseInt(s.getAttribute('data-value')) <= currentRating ? '#f1c40f' : '#555';
+                    }
+                });
+            });
+            
+            star.addEventListener('mouseleave', () => {
+                feedbackStars.forEach(s => {
+                    if (parseInt(s.getAttribute('data-value')) <= currentRating) {
+                        s.style.color = '#f1c40f';
+                    } else {
+                        s.style.color = '#555';
+                    }
+                });
+            });
+        });
+    }
+
+    const submitFeedbackBtn = document.getElementById('submit-feedback-btn');
+    if (submitFeedbackBtn) {
+        submitFeedbackBtn.addEventListener('click', async () => {
+            const suggestion = document.getElementById('feedback-suggestion').value.trim();
+            
+            if (currentRating === 0) {
+                return showToast('Please select a star rating.', true);
+            }
+            
+            const originalText = submitFeedbackBtn.textContent;
+            submitFeedbackBtn.textContent = 'Submitting...';
+            submitFeedbackBtn.disabled = true;
+            
+            try {
+                // Actual API call
+                await apiFetch('/users/feedback', {
+                    method: 'POST',
+                    body: JSON.stringify({ rating: currentRating, suggestion }),
+                });
+                
+                // Simulate delay
+                // await new Promise(r => setTimeout(r, 600));
+                
+                showToast('Thank you for your feedback!');
+                
+                // Reset form
+                currentRating = 0;
+                feedbackStars.forEach(s => s.style.color = '#555');
+                document.getElementById('feedback-suggestion').value = '';
+                
+            } catch (err) {
+                showToast(err.message || 'Failed to submit feedback.', true);
+            } finally {
+                submitFeedbackBtn.textContent = originalText;
+                submitFeedbackBtn.disabled = false;
+            }
+        });
+    }
+
+
     // Exposed globals for inline onclick
     window.removeFriend = async (friendId) => {
         try {
@@ -632,13 +992,6 @@ document.addEventListener('DOMContentLoaded', () => {
         leaderboardWeeks: 2,
         leaderboardCoins: 14,
         get totalCoins() { return this.streakCoins + this.reductionCoins + this.leaderboardCoins; },
-        friends: [
-            { name: 'Alex "Carbon-Killer" Reed', saved: '12.4k kg', avatar: 'fa-user-ninja', rank: 1 },
-            { name: 'S. Chen', saved: '10.1k kg', avatar: 'fa-user-astronaut', rank: 2 },
-            { name: 'You', saved: '8.2k kg', avatar: 'fa-user', rank: 3, isMe: true },
-            { name: 'Maria Lopez', saved: '6.5k kg', avatar: 'fa-user-graduate', rank: 4 },
-            { name: 'Jake Wilson', saved: '4.1k kg', avatar: 'fa-user-tie', rank: 5 },
-        ],
         coupons: [
             { threshold: 20, discount: '5% OFF', code: 'ECO5-GREEN-2026', desc: 'Eco-friendly store discount', tier: '\ud83e\udd49 Bronze' },
             { threshold: 50, discount: '15% OFF', code: 'SUSTAIN15-EARTH', desc: 'Sustainable brands discount', tier: '\ud83e\udd48 Silver' },
@@ -659,7 +1012,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // Streak dots — current week Mon→Sun in fixed order
         const dotsEl = document.getElementById('streak-dots');
-        const history = JSON.parse(localStorage.getItem('ctg_daily_footprint') || '{}');
+        const historyKey = `ctg_daily_footprint_v2_${state.user ? state.user.id : 'guest'}`;
+        const history = JSON.parse(localStorage.getItem(historyKey) || '{}');
         const today = new Date();
         today.setHours(0, 0, 0, 0);
 
@@ -717,20 +1071,40 @@ document.addEventListener('DOMContentLoaded', () => {
                 </div>`;
         }).join('');
 
-        // Leaderboard
-        const lbList = document.getElementById('rewards-lb-list');
-        lbList.innerHTML = rewardsState.friends.map((f, i) => {
-            const rankClass = i === 0 ? 'gold' : i === 1 ? 'silver' : i === 2 ? 'bronze' : 'normal';
-            const top3 = i < 3 ? 'top-3' : '';
-            const isMe = f.isMe ? 'is-me' : '';
-            return `
-                <div class="rewards-lb-item ${top3} ${isMe}">
-                    <div class="lb-rank ${rankClass}">${f.rank}</div>
-                    <div class="lb-avatar"><i class="fa-solid ${f.avatar}"></i></div>
-                    <div class="lb-name">${f.name}${f.isMe ? '<span class="me-badge">YOU</span>' : ''}</div>
-                    <div class="lb-saved">${f.saved}</div>
-                </div>`;
-        }).join('');
+        // Progress Chart
+        const progressCtx = document.getElementById('userProgressChart');
+        if (progressCtx) {
+            if (window.userProgressChartInstance) window.userProgressChartInstance.destroy();
+
+            const sortedHistoryKeys = Object.keys(history).sort((a, b) => new Date(a) - new Date(b));
+            const labels = sortedHistoryKeys.map(k => new Date(k).toLocaleDateString('en', { month: 'short', day: 'numeric' }));
+            const dataVals = sortedHistoryKeys.map(k => history[k]);
+
+            window.userProgressChartInstance = new Chart(progressCtx.getContext('2d'), {
+                type: 'line',
+                data: {
+                    labels: labels.length ? labels : ['No data'],
+                    datasets: [{
+                        label: 'Daily Footprint (kg CO₂)',
+                        data: dataVals.length ? dataVals : [0],
+                        borderColor: '#39ff14',
+                        backgroundColor: 'rgba(57, 255, 20, 0.2)',
+                        fill: true,
+                        tension: 0.4,
+                        borderWidth: 2,
+                        pointBackgroundColor: '#39ff14'
+                    }]
+                },
+                options: {
+                    responsive: true, maintainAspectRatio: false,
+                    plugins: { legend: { display: false } },
+                    scales: {
+                        x: { ticks: { color: '#aaa' }, grid: { color: '#333' } },
+                        y: { ticks: { color: '#aaa', stepSize: 5 }, grid: { color: '#333' } }
+                    }
+                }
+            });
+        }
     }
 
     // Copy coupon code
